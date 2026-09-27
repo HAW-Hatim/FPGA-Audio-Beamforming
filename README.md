@@ -19,7 +19,7 @@ Project files for real-time digital audio beamforming on FPGA Basys 3 board, dev
 
 # Goal
 Our goal was to implement and verify delay-and-sum beamforming for audio signals picked up by a self-made linear microphone array. We defined success as: signals from the intended direction measurably amplified (or at least less attenuated) compared to other directions, verified either aurally or through the FFT spectrum.
-The goal of this was 
+
 
 # Architecture
 
@@ -37,7 +37,7 @@ The goal of this was
 | **Beam steering** | −90° to +90°, 11 discrete angles with integer-sample delays |
 
 <p align="center">
-  <img src="Results/Setup.jpg" alt="Linear mic array" width="100%">
+  <img src="Results/Setup.jpg" alt="Linear mic array" width="45%">
 </p>
 
 ## FFT
