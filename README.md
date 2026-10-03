@@ -17,45 +17,77 @@ Project files for real-time digital audio beamforming on FPGA Basys 3 board, dev
 ---
 
 
-# Goal
-Our goal was to implement and verify delay-and-sum (DAS) beamforming for audio signals picked up by a self-made linear microphone array. We defined success as: signals from the intended direction measurably amplified (or at least less attenuated) compared to other directions, verified either aurally or through the FFT spectrum.
-The workload was split into two parts:
-- I2S transceiver and VGA display
-- DAS algorithm and FFT
+## Goal
+Our goal was to implement and verify delay-and-sum (DAS) beamforming for audio signals picked up by a self-made linear microphone array. We defined success as: signals from the intended direction measurably amplified (or at least less attenuated) compared to other directions, verified either aurally or through the FFT spectrum.  
+  
+The workload was split into two parts:  
+  
+**My contribution:**
+- Angle-to-delay lookup table
+- Delay-and-sum algorithm (ring buffer, RAM, summation)
+- 32-point parallel-pipelined FFT
+
+**Project partner:**
+- I2S transceiver (timing, receivers, transmitter)
+- VGA spectrum display
 
 
-# Architecture
+## Architecture
 
- ## Top_Beamformer_Analysis
+`Top_Beamformer_Analysis` is the top module that ties everything together. It contains
+`Top_Beamformer` (DAS algorithm + I2S transceiver) and the two verification modules
+`FFT_TOP` and `VGA_TOP`. Additional block diagrams for submodules are in `Blockdiagrams/`.
+
+### Top_Beamformer_Analysis
+<p align="center">
+  <img src="Blockdiagrams/DY_Final (1)-BeamformerAnalysis.jpg" alt="BeamformerAnalysis" width="100%">
+</p>
+
+#### `FFT_TOP`
+- Parallelizes incoming DAS audio from `Top_Beamformer`
+- Performs the FFT
+- Outputs the magnitude spectrum
+- Uses a custom library for complex number types and operations
+
+#### `VGA_TOP`
+- Live display of the magnitude spectrum
+
+### Top_Beamformer
+<p align="center">
+  <img src="Blockdiagrams/Top_Beamformer (3).jpg" alt="Top_Beamformer" width="100%">
+</p>
+
+#### `clk_wiz_I2S`
+- Clocking wizard IP block to generate the appropriate clock
+- All systems use it to avoid CDC issues
+
+#### `i2s_top_5mic`
+- Transceiver module for the microphones
+- Receives digital data
+- Outputs 24-bit audio from each mic to the DAS algorithm
+- Outputs the DAS result to the I2S Pmod
+
+#### `delay_and_sum`
+- Implementation of the DAS algorithm
+- Delays realized with ring buffers
+
+#### `Angle_To_Delay`
+- Translates the requested angle into a delay for each microphone
+- Angle entered as a binary number via Basys 3 switches
+
+#### `Seven_segment_display`
+- Displays the requested beamforming angle (−90° to 90°)
+ 
 
  
- ### FFT_TOP
- - Parallelisation of incoming summed audio from Top_Beamformer
- - Performing FFT
- - Output magnitude spectrum
+## Specification
 
- ### VGA_TOP
- - Live display of magnitude spectrum
+### Linear Microphone Array
 
 
- ## Top_Beamformer
- 
- ### clk_wiz_I2S
- 
- ### i2s_top_5mic
- 
- ### delay_and_sum
- 
- ### Angle_To_Delay
- - Switch position
- ### Seven_segment_display
-- Display the angle (-90° to 90°) that was entered 
- 
-
- 
-# Specification
-
-## Linear Microphone Array
+<p align="center">
+  <img src="Results/Setup.jpg" alt="Linear mic array" width="45%">
+</p>
 
 | | |
 |---|---|
@@ -66,11 +98,9 @@ The workload was split into two parts:
 | **Sampling rate** | 50 kHz |
 | **Beam steering** | −90° to +90°, 11 discrete angles with integer-sample delays |
 
-<p align="center">
-  <img src="Results/Setup.jpg" alt="Linear mic array" width="45%">
-</p>
 
-## FFT
+
+### FFT
 
 | | |
 |---|---|
@@ -81,11 +111,11 @@ The workload was split into two parts:
 | **Frequency resolution** | 1.5625 kHz |
 
 
-## I2S
+### I2S
 24-bit audio at 50 kHz over a standard I2S bus (3.2 MHz BCLK, 64-BCLK stereo frames)
 
 
-# Conclusion and Result
+## Conclusion and Results
 
 To sum up, we successfully implemented the delay-and-sum algorithm for audio beamforming. We also added visual and aural verification on the FPGA, confirming that the beamformer works. The results are shown below.
 
