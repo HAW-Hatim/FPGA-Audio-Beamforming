@@ -18,11 +18,41 @@ Project files for real-time digital audio beamforming on FPGA Basys 3 board, dev
 
 
 # Goal
-Our goal was to implement and verify delay-and-sum beamforming for audio signals picked up by a self-made linear microphone array. We defined success as: signals from the intended direction measurably amplified (or at least less attenuated) compared to other directions, verified either aurally or through the FFT spectrum.
+Our goal was to implement and verify delay-and-sum (DAS) beamforming for audio signals picked up by a self-made linear microphone array. We defined success as: signals from the intended direction measurably amplified (or at least less attenuated) compared to other directions, verified either aurally or through the FFT spectrum.
+The workload was split into two parts:
+- I2S transceiver and VGA display
+- DAS algorithm and FFT
 
 
 # Architecture
 
+ ## Top_Beamformer_Analysis
+
+ 
+ ### FFT_TOP
+ - Parallelisation of incoming summed audio from Top_Beamformer
+ - Performing FFT
+ - Output magnitude spectrum
+
+ ### VGA_TOP
+ - Live display of magnitude spectrum
+
+
+ ## Top_Beamformer
+ 
+ ### clk_wiz_I2S
+ 
+ ### i2s_top_5mic
+ 
+ ### delay_and_sum
+ 
+ ### Angle_To_Delay
+ - Switch position
+ ### Seven_segment_display
+- Display the angle (-90° to 90°) that was entered 
+ 
+
+ 
 # Specification
 
 ## Linear Microphone Array
