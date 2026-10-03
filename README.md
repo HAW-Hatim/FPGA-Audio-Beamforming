@@ -4,7 +4,7 @@ Project files for real-time digital audio beamforming on FPGA Basys 3 board, dev
 ## Repository Structure
 ```
 .
-├── Blockdiagrams/     Block diagrams for all VHDL modules
+├── Block diagrams/    Block diagrams for all VHDL modules
 ├── Constraints/       Basys 3 pin constraints (.xdc)
 ├── Results/           Beamformed audio, array setup photos, VGA spectrum
 ├── Scripts/           Python/Matlab scripts for twiddle factors and delay tables
@@ -36,11 +36,11 @@ The workload was split into two parts:
 
 `Top_Beamformer_Analysis` is the top module that ties everything together. It contains
 `Top_Beamformer` (DAS algorithm + I2S transceiver) and the two verification modules
-`FFT_TOP` and `VGA_TOP`. Additional block diagrams for submodules are in `Blockdiagrams/`.
+`FFT_TOP` and `VGA_TOP`. Additional block diagrams for submodules are in `Block diagrams/`.
 
 ### Top_Beamformer_Analysis
 <p align="center">
-  <img src="Blockdiagrams/DY_Final (1)-BeamformerAnalysis.jpg" alt="BeamformerAnalysis" width="100%">
+  <img src="Block diagrams/DY_Final (1)-BeamformerAnalysis.jpg" alt="BeamformerAnalysis" width="100%">
 </p>
 
 #### `FFT_TOP`
@@ -54,7 +54,7 @@ The workload was split into two parts:
 
 ### Top_Beamformer
 <p align="center">
-  <img src="Blockdiagrams/Top_Beamformer (3).jpg" alt="Top_Beamformer" width="100%">
+  <img src="Block diagrams/Top_Beamformer (3).jpg" alt="Top_Beamformer" width="100%">
 </p>
 
 #### `clk_wiz_I2S`
